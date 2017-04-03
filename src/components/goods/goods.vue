@@ -28,17 +28,23 @@
                 <div class="price">
                   <span class="now">￥{{food.price}}</span><span class="old" v-show="food.oldPrice">￥{{food.oldPrice}}</span>
                 </div>
+                <div class="cartcontrol-wrapper">
+                  <cartcontrol :food="food"></cartcontrol>
+                </div>
               </div>
             </li>
           </ul>
         </li>
       </ul>
     </div>
+    <shopcart :delivery-price="seller.deliveryPrice" :min-price="seller.minPrice"></shopcart>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   import BScroll from 'better-scroll';
+  import shopcart from 'components/shopcart/shopcart';
+  import cartcontrol from 'components/cartcontrol/cartcontrol';
 
   const ERR_OK = 0;
 
@@ -82,7 +88,10 @@
         scrollY: 0
       };
     },
-    components: {},
+    components: {
+      shopcart,
+      cartcontrol
+    },
     methods: {
       selectMenu (index, event) {
         if (!event._constructed) { // 过滤原生事件
@@ -97,7 +106,8 @@
           click: true
         });
         this.foodsScroll = new BScroll(this.$els.goodsWrapper, {
-          probeType: 3
+          probeType: 3,
+          click: true
         });
 
         this.foodsScroll.on('scroll', (position) => {
@@ -221,4 +231,8 @@
               text-decoration line-through
               font-size 10px
               color rgb(147, 153, 159)
+          .cartcontrol-wrapper
+            position absolute
+            right 0
+            bottom 12px
 </style>
