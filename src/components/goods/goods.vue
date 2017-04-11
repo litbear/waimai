@@ -37,7 +37,7 @@
         </li>
       </ul>
     </div>
-    <shopcart :select-foods="selectFoods" :delivery-price="seller.deliveryPrice" :min-price="seller.minPrice"></shopcart>
+    <shopcart v-ref:shopcart :select-foods="selectFoods" :delivery-price="seller.deliveryPrice" :min-price="seller.minPrice"></shopcart>
   </div>
 </template>
 
@@ -103,6 +103,12 @@
       shopcart,
       cartcontrol
     },
+    events: {
+      // ES6 写法 'cart.add' (target) {}
+      'cart.add': function (target) {
+        this._drop(target);
+      }
+    },
     methods: {
       selectMenu (index, event) {
         if (!event._constructed) { // 过滤原生事件
@@ -111,6 +117,12 @@
         let foodList = this.$els.goodsWrapper.getElementsByClassName('food-list-hook');
         let el = foodList[index];
         this.foodsScroll.scrollToElement(el, 300);
+      },
+      _drop (target) {
+        this.$nextTick(() => {
+          // 将cartcontrol中传来的DOM元素转发给shopcart组件处理
+          this.$refs.shopcart.drop(target);
+        });
       },
       _initScroll () {
         this.menuScroll = new BScroll(this.$els.menuWrapper, {

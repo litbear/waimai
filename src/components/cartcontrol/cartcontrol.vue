@@ -32,6 +32,8 @@
         } else {
           this.food.count++;
         }
+        // event.target 即触发该事件的dom对象 原生属性 并非封装
+        this.$dispatch('cart.add', event.target);
       },
       decreaseCart (event) {
         if (!event._constructed) {
